@@ -1,6 +1,7 @@
 use std::env;
 use std::fs;
 use std::path::Path;
+use std::io::Read;
 
 //The following crates are used for testing
 extern crate tempfile; //Creates temp files and directories
@@ -13,24 +14,31 @@ fn main() {
     // both file names. The first should be the name of a file
     // containing the text to disemvowel, and the second should
     // be the file we want to write the disemvoweled text to.
-    let args: Vec<String> = env::args().collect();
 
     //TODO: Panic if not enough arguments are provided
     //Panic should output the string "Not enough arguments"
+    let args: Vec<String> = env::args().collect();
+    if args.len() != 3 {
+        panic! ("Not enough arguements ");
+    }
 
     //TODO:
     //  * Pass an argument to read_file to read the original text
     //  * Pass that to disemvowel to remove the vowels
     //  * Write the disemvoweled text using write_file
+    let mut file = std::fs::File::open(args[1]).unwrap();
+    let mut contents = String::new();
+    file.read_to_string(&mut contents).unwrap();
+    
 
     // Replace String::from("dummy text") with what you get from read_file
-    let s = String::from("dummy text");
+    let s = String::from(contents);
 
     let s_disemvowel = disemvowel(&s);
 
     // Use command-line arguments for the name of the file,
     // and s_disemvowel for the text to write out.
-    write_file(Path::new("dummy.txt"), "output string");
+    write_file(Path::new(args[2]), s_disemvowel);
 }
 
 fn read_file(path: &Path) -> String {
