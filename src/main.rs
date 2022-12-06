@@ -18,18 +18,15 @@ fn main() {
     //TODO: Panic if not enough arguments are provided
     //Panic should output the string "Not enough arguments"
     let args: Vec<String> = env::args().collect();
-    if args.len() != 3 {
-        panic! ("Not enough arguements ");
+    if args.len() < 3 {
+        panic! ("Not enough arguments");
     }
-
     //TODO:
     //  * Pass an argument to read_file to read the original text
     //  * Pass that to disemvowel to remove the vowels
     //  * Write the disemvoweled text using write_file
-    let mut file = std::fs::File::open(args[1]).unwrap();
-    let mut contents = String::new();
-    file.read_to_string(&mut contents).unwrap();
-    
+   
+    let contents = read_file(Path::new(&args[1]));
 
     // Replace String::from("dummy text") with what you get from read_file
     let s = String::from(contents);
@@ -38,7 +35,7 @@ fn main() {
 
     // Use command-line arguments for the name of the file,
     // and s_disemvowel for the text to write out.
-    write_file(Path::new(args[2]), s_disemvowel);
+    write_file(Path::new(&args[2]), &s_disemvowel);
 }
 
 fn read_file(path: &Path) -> String {
@@ -50,8 +47,18 @@ fn write_file(path: &Path, s: &str) {
 
 //TODO: Return the input string without vowels.
 fn disemvowel(s: &str) -> String {
-    String::from(s)
+   let mut char_vec: Vec<char> = s.chars().collect();
+   let mut result: String = (*"").to_string();
+
+  for letter in &char_vec {
+     if letter.eq(&'a') || letter.eq(&'e') || letter.eq(&'i') || letter.eq(&'o') || letter.eq(&'u') || letter.eq(&'A') || letter.eq(&'E') || letter.eq(&'I') || letter.eq(&'O') || letter.eq(&'U'){  
+     } else {
+        result = result + &letter.to_string();
+     }
+  }
+ return result;
 }
+    
 
 // Everything from here down is Rust test code. You shouldn't need to
 // change any of this.
